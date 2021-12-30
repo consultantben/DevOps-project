@@ -15,8 +15,8 @@ pipeline {
            stage("build & SonarQube analysis") {
             agent any
             steps {
-              withSonarQubeEnv('http://34.208.44.68:9000') {
-                sh 'mvn clean package sonar:sonar'
+              withSonarQubeEnv('sonar') {
+                sh 'mvn -f SampleWebApp/pom.xml clean package sonar:sonar'
               }
             }
           }
