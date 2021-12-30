@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         GIT_URL = 'https://github.com/consultantben/DevOps-project.git'
-        TOMCAT_URL    = 'http://34.221.212.37:8080/'
+        TOMCAT_URL    = 'http://34.220.46.106:8080/'
     }
     
     stages {
@@ -12,6 +12,21 @@ pipeline {
                 git "${GIT_URL}"
             }
         }
+           stage("build & SonarQube analysis") {
+            agent any
+            steps {
+              withSonarQubeEnv('http://34.208.44.68:9000') {
+                sh 'mvn clean package sonar:sonar'
+              }
+            }
+          }
+          stage("Quality Gate") {
+            steps {
+              timeout(time: 1, unit: 'HOURS') {
+                waitForQualityGate abortPipeline: true
+              }
+            }
+          }
         stage('Build with Maven') {
             steps {
                 sh 'cd SampleWebApp && mvn clean install'
