@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         GIT_URL = 'https://github.com/consultantben/DevOps-project.git'
-        TOMCAT_URL    = 'http://34.220.46.106:8080/'
+        TOMCAT_URL    = 'http://54.149.42.15:8080/'
     }
     
     stages {
@@ -30,6 +30,21 @@ pipeline {
         stage('Build with Maven') {
             steps {
                 sh 'cd SampleWebApp && mvn clean install'
+            }
+        }
+        stage('Deploy to JFrog') {
+            steps {
+                rtUpload (
+                    serverId: 'my-jfrog',   #Server ID that was configured on Jenkins
+                    spec: '''{​​​​​
+                          "files": [
+                            {​​​​​​​​​​​​​​​​​​​​​​​​​​
+                              "pattern": "**/*.war",
+                              "target": "my-repo/".  # Target is a repository that we created on JFrog
+                            }​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+                        ]
+                    }​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​''',
+                )
             }
         }
         stage('Deploy to Tomcat') {
