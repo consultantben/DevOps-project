@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         GIT_URL = 'https://github.com/consultantben/DevOps-project.git'
-        TOMCAT_URL    = 'http://34.214.38.211:8080/'
+        TOMCAT_URL    = 'http://54.149.42.15:8080/'
     }
     
     stages {
